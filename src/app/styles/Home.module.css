@@ -1,0 +1,95 @@
+.container {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+}
+
+.mobileContainer {
+  width: 375px; /* 모바일 화면 너비 설정 */
+  height: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.header {
+  background-color: #a3d133;
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.content {
+  padding: 20px;
+  text-align: center;
+}
+
+.map img {
+  width: 100%;
+  height: auto;
+}
+
+.status {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #d9534f;
+}
+
+.statusDescription {
+  font-size: 14px;
+  color: #666;
+}
+
+.report {
+  margin-top: 20px;
+  background-color: #f8f8f8;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.reportTitle {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.reportItem {
+  font-size: 14px;
+  color: #333;
+}
+
+.reportItem + .reportItem {
+  margin-top: 5px;
+}
+
+.fab {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  background-color: #a3d133;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  border: none;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.fab:hover {
+  background-color: #8bb029;
+}
