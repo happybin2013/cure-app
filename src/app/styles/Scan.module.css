@@ -41,6 +41,21 @@
   text-align: center;
 }
 
+.scanButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #a3d133;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.scanButton:hover {
+  background-color: #8bb029;
+}
+
 .instruction {
   font-size: 14px;
   color: #666;
@@ -51,4 +66,9 @@
   font-size: 16px;
   color: #333;
   margin-top: 10px;
+}
+
+.qrReader {
+  width: 100%;
+  max-width: 400px;
 }

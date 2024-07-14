@@ -1,37 +1,45 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
+import { Html5QrcodeScanner } from "html5-qrcode";
 import styles from "../styles/Scan.module.css";
-
-const QrScanner = dynamic(() => import("react-qr-scanner"), { ssr: false });
 
 export default function Scan() {
   const [result, setResult] = useState("");
+  const [showScanner, setShowScanner] = useState(false);
+  const qrCodeRef = useRef(null);
   const router = useRouter();
-
-  const handleScan = (data) => {
-    if (data) {
-      setResult(data.text);
-      // 여기서 추가적인 동작을 수행할 수 있습니다.
-      alert(`QR 코드 스캔 결과: ${data.text}`);
-    }
-  };
-
-  const handleError = (err) => {
-    console.error(err);
-  };
 
   const handleBackClick = () => {
     router.push("/");
   };
 
-  const previewStyle = {
-    height: 240,
-    width: 320,
+  const handleScanSuccess = (decodedText) => {
+    setResult(decodedText);
+    setShowScanner(false);
+    qrCodeRef.current.clear();
   };
+
+  const handleButtonClick = () => {
+    setShowScanner(true);
+  };
+
+  useEffect(() => {
+    if (showScanner) {
+      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+      const html5QrCode = new Html5QrcodeScanner("qr-reader", config, false);
+      qrCodeRef.current = html5QrCode;
+      html5QrCode.render(handleScanSuccess);
+    }
+
+    return () => {
+      if (qrCodeRef.current) {
+        qrCodeRef.current.clear();
+      }
+    };
+  }, [showScanner]);
 
   return (
     <div className={styles.container}>
@@ -48,12 +56,10 @@ export default function Scan() {
       </div>
 
       <div className={styles.content}>
-        <QrScanner
-          delay={300}
-          style={previewStyle}
-          onError={handleError}
-          onScan={handleScan}
-        />
+        <button onClick={handleButtonClick} className={styles.scanButton}>
+          스캔하기
+        </button>
+        {showScanner && <div id="qr-reader" className={styles.qrReader}></div>}
         <p className={styles.instruction}>인식된 QR 코드를 확인해주세요</p>
         {result && <p className={styles.result}>스캔 결과: {result}</p>}
       </div>
