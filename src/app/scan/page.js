@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import styles from "../../styles/Scan.module.css";
+import styles from "../styles/Scan.module.css";
 
 const QrScanner = dynamic(() => import("react-qr-scanner"), { ssr: false });
 
