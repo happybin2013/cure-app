@@ -14,6 +14,16 @@ const useLocation = () => {
   const [address, setAddress] = useState(null);
   const [error, setError] = useState(null);
 
+  const getAddress = (address) => {
+    const { county, city, borough } = address;
+  
+    if (county) return county;
+    if (city === '서울') return borough;
+    if (city && borough) return `${city} ${borough}`;
+    if (city) return city;
+    return null;
+  };
+
   useEffect(() => {
     const fetchAddress = async (latitude, longitude) => {
       try {
@@ -24,8 +34,9 @@ const useLocation = () => {
             lon: longitude,
           },
         });
+
         const address = response.data.address;
-        setAddress(`${address.city}`);
+        setAddress(getAddress(address));
       } catch (err) {
         setError('Failed to fetch address');
       }
