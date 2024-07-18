@@ -5,18 +5,18 @@ import { useRouter } from "next/navigation";
 import styles from "./styles/Home.module.css";
 import ReportList from "./components/ReportList";
 import useLocation from "./hooks/useLocation";
+import useReports from "./hooks/useReports";
 import SeoulMapSvg from "./components/SeoulMapSvg";
 import GyeonggiMapSvg from "./components/GyeonggiMapSvg";
 
 export default function Home() {
   const router = useRouter();
   const { location, address, error } = useLocation();
+  const reportCntn = useReports(address);
 
   const handleFabClick = () => {
     router.push("/scan");
   };
-
-  const reports = ["따릉이 QR", "전동킥보드 QR"]; //@TODO: db조회로 변경
 
   const seoulDistricts = [
     "종로구", "중구", "용산구", "성동구", "광진구", "동대문구", "중랑구", "성북구", 
@@ -73,7 +73,7 @@ export default function Home() {
           <div className={styles.statusDescription}>
             {address ? `${address}의 큐싱 청정도는 오염 3 단계 입니다.` : '행정구역 정보를 가져오는 중...'}
           </div>
-          <ReportList address={address} reports={reports} />
+          <ReportList address={address} reportCntn={reportCntn} />
         </div>
       </div>
 

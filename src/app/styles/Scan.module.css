@@ -34,10 +34,10 @@
 }
 
 .content {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
   text-align: center;
 }
 
@@ -68,7 +68,27 @@
   margin-top: 10px;
 }
 
+.Scan_header__kB9Ik {
+  padding: 0;
+}
+
+.Scan_content__TQUQN {
+  width: 100%;
+}
+
 .qrReader {
   width: 100%;
-  max-width: 400px;
+  position: relative;
 }
+
+/* .qrOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  border: 2px solid white;
+  border-radius: 16px;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+} */
