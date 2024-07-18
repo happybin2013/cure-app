@@ -47,6 +47,7 @@
   .qrCode {
     margin: 20px 0;
     border: 2px solid #d9534f;
+    max-width: 200px;
     padding: 10px;
     border-radius: 8px;
   }
