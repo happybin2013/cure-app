@@ -1,13 +1,52 @@
 "use client";
 
-import React, { Suspense } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import styles from "../styles/Result.module.css";
 import { useRouter, useSearchParams } from "next/navigation";
+import {Image} from "next/image";
 
-function Result() {
+function ResultComponent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const result = searchParams.get("result");
+
+    const [analysis, setAnalysis] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (result) {
+                const prompt = `URL analysis: ${result}\nRespond only in JSON format:\n{\n"urlPatternYn": "Y/N",\n"benignOrMalicious": "Benign/Malicious",\n"patternFeature": ["features in Korean"],\n"pobm": 0-100 // Probability of being malicious (%)\n}\nProvide JSON only, no other explanation.`
+                try {
+                    const response = await fetch('/api/analyzeUrl', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            prompt
+                        }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to analyze URL');
+                    }
+
+                    const data = await response.json();
+                    setAnalysis(data);
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            } else {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [result]);
 
     const handleBackClick = () => {
         router.push("/scan"); // 스캔 페이지로 돌아가기
@@ -27,35 +66,47 @@ function Result() {
             </div>
 
             <div className={styles.content}>
-                <h2 className={styles.title} style={{ color: "#d9534f" }}>큐싱 의심</h2>
-                <img src="test_qrcode.png" alt="QR Code" className={styles.qrCode} />
+                {loading ? (
+                    <div>Loading...</div>
+                ) : error ? (
+                    <div>Error: {error}</div>
+                ) : (
+                    <>
+                        <h2 className={styles.title} style={{ color: analysis.benignOrMalicious === 'Malicious' ? '#d9534f' : '#5cb85c' }}>
+                            {analysis.benignOrMalicious === 'Malicious' ? '큐싱 의심' : '정상'}
+                        </h2>
+                        <Image src="test_qrcode.png" alt="QR Code" className={styles.qrCode} />
 
-                <div className={styles.qrUrl}>
-                    {result ? decodeURIComponent(result) : "QR 스캔 정보가 없습니다."}
-                </div>
-
-                <div className={styles.warning}>
-                    <span className={styles.warningIcon}>⚠️</span>
-                    접속하지 마세요! 스미싱이 예상되는 악성 URL입니다.
-                </div>
-
-                <div className={styles.infoContainer}>
-                    <div className={styles.infoHeader}>
-                        <span className={styles.infoHeaderIcon}>📊</span>
-                        <span className={styles.infoHeaderText}>오염 예상 지수</span>
-                    </div>
-                    <div className={styles.infoScore}>97.3%</div>
-                    <div className={styles.infoDetail}>
-                        <div>
-                            <div className={styles.detailLabel}>의심 신고 횟수</div>
-                            <div className={styles.detailValue}>63 건</div>
+                        <div className={styles.qrUrl}>
+                            {result ? decodeURIComponent(result) : "QR 스캔 정보가 없습니다."}
                         </div>
-                        <div>
-                            <div className={styles.detailLabel}>의심 의심 패턴</div>
-                            <div className={styles.detailValue}>8회 탐지</div>
+
+                        {analysis.benignOrMalicious === 'Malicious' && (
+                            <div className={styles.warning}>
+                                <span className={styles.warningIcon}>⚠️</span>
+                                접속하지 마세요! 스미싱이 예상되는 악성 URL입니다.
+                            </div>
+                        )}
+
+                        <div className={styles.infoContainer}>
+                            <div className={styles.infoHeader}>
+                                <span className={styles.infoHeaderIcon}>📊</span>
+                                <span className={styles.infoHeaderText}>오염 예상 지수: {analysis.pobm}</span>
+                            </div>
+                            <div className={styles.infoScore}>{analysis.pobm}%</div>
+                            <div className={styles.infoDetail}>
+                                <div>
+                                    <div className={styles.detailLabel}>패턴 특징</div>
+                                    <div className={styles.detailValue}>
+                                        {analysis.patternFeature && analysis.patternFeature.length > 0
+                                            ? analysis.patternFeature.join(', ')
+                                            : "해당 없음"}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </>
+                )}
 
                 <button onClick={handleRetryClick} className={styles.retryButton}>
                     다시 검사하기
@@ -64,11 +115,12 @@ function Result() {
         </div>
     );
 }
-
-export default function WrappedResult() {
+function Result() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <Result />
+            <ResultComponent />
         </Suspense>
     );
 }
+
+export default Result;

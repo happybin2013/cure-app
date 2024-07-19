@@ -3,7 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
-import { Html5QrcodeScanner } from "html5-qrcode";
+import { Html5Qrcode, Html5QrcodeScanner } from "html5-qrcode";
+
 import styles from "../styles/Scan.module.css";
 
 export default function Scan() {
@@ -16,7 +17,7 @@ export default function Scan() {
     router.push("/");
   };
 
-  const handleScanSuccess = (decodedText) => {
+  const onScanSuccess = (decodedText) => {
     setResult(decodedText);
     if (qrCodeRef.current) {
       qrCodeRef.current.clear();
@@ -28,8 +29,6 @@ export default function Scan() {
   useEffect(() => {
     const startQrScanner = async () => {
       try {
-        await navigator.mediaDevices.getUserMedia({ video: true });
-
         const config = {
           fps: 10,
           rememberLastUsedCamera: true,
@@ -40,9 +39,9 @@ export default function Scan() {
           facingMode: { exact: "environment" }, // 모바일에서는 후면 카메라를 우선으로 사용
         };
 
-        const html5QrCode = new Html5QrcodeScanner("qr-reader", config, false);
-        qrCodeRef.current = html5QrCode;
-        html5QrCode.render(handleScanSuccess);
+        const html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", config, false);
+        qrCodeRef.current = html5QrcodeScanner;
+        html5QrcodeScanner.render(onScanSuccess);
         setScannerInitialized(true); // 스캐너가 초기화되었음을 표시
       } catch (err) {
         console.error("Camera permission denied", err);
@@ -78,8 +77,8 @@ export default function Scan() {
 
       <div className={styles.content}>
         <div id="qr-reader" className={styles.qrReader}></div>
-        {scannerInitialized && <p className={styles.instruction}>의심되는 QR 코드를 인식해주세요</p>}
       </div>
+      {scannerInitialized && <div className={styles.instruction}>의심되는 QR 코드를 인식해주세요</div>}
     </div>
   );
 }
