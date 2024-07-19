@@ -17,14 +17,10 @@ export async function POST(request) {
       }),
     });
 
-    console.log(response)
-
     if (!response.ok) {
       throw new Error('Failed to fetch from OpenAI API');
     }
 
     const data = await response.json();
-    console.log("res data")
-    console.log(data)
     return NextResponse.json(data);
 }

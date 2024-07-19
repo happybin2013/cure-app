@@ -34,7 +34,14 @@ function ResultComponent() {
                     }
 
                     const data = await response.json();
-                    setAnalysis(data);
+
+                    if (!data.choices || data.choices.length === 0) {
+                        throw new Error("No choices found in the response data");
+                    }
+                    const contentObject = JSON.parse(
+                        data.choices[0].message.content.replace(/```json|```/g, "").trim()
+                    );
+                    setAnalysis(contentObject);
                 } catch (err) {
                     setError(err.message);
                 } finally {
