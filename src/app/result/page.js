@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import styles from "../styles/Result.module.css";
 import { useRouter, useSearchParams } from "next/navigation";
-import {Image} from "next/image";
+import Image from "next/image";  // Correct import statement
 
 function ResultComponent() {
     const router = useRouter();
@@ -17,7 +17,7 @@ function ResultComponent() {
     useEffect(() => {
         const fetchData = async () => {
             if (result) {
-                const prompt = `URL analysis: ${result}\nRespond only in JSON format:\n{\n"urlPatternYn": "Y/N",\n"benignOrMalicious": "Benign/Malicious",\n"patternFeature": ["features in Korean"],\n"pobm": 0-100 // Probability of being malicious (%)\n}\nProvide JSON only, no other explanation.`
+                const prompt = `URL analysis: ${result}\nRespond only in JSON format:\n{\n"urlPatternYn": "Y/N",\n"benignOrMalicious": "Benign/Malicious",\n"patternFeature": ["malicious features in Korean"],\n"pobm": 0-100 // Probability of being malicious (%)\n}\nProvide JSON only, no other explanation.`
                 try {
                     const response = await fetch('/api/analyzeUrl', {
                         method: 'POST',
@@ -82,7 +82,7 @@ function ResultComponent() {
                         <h2 className={styles.title} style={{ color: analysis.benignOrMalicious === 'Malicious' ? '#d9534f' : '#5cb85c' }}>
                             {analysis.benignOrMalicious === 'Malicious' ? '큐싱 의심' : '정상'}
                         </h2>
-                        <Image src="test_qrcode.png" alt="QR Code" className={styles.qrCode} />
+                        <Image src="/test_qrcode.png" alt="QR Code" className={styles.qrCode} width={200} height={200} />
 
                         <div className={styles.qrUrl}>
                             {result ? decodeURIComponent(result) : "QR 스캔 정보가 없습니다."}
@@ -98,7 +98,7 @@ function ResultComponent() {
                         <div className={styles.infoContainer}>
                             <div className={styles.infoHeader}>
                                 <span className={styles.infoHeaderIcon}>📊</span>
-                                <span className={styles.infoHeaderText}>오염 예상 지수: {analysis.pobm}</span>
+                                <span className={styles.infoHeaderText}>오염 예상 지수</span>
                             </div>
                             <div className={styles.infoScore}>{analysis.pobm}%</div>
                             <div className={styles.infoDetail}>
