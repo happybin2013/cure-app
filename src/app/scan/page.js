@@ -25,7 +25,10 @@ export default function Scan() {
     
     setTimeout(() => {
       setIsReady(false);
-      router.push(`/result?result=${encodeURIComponent(decodedText)}`);
+      // URL 객체 사용
+      const url = new URL('/result', window.location.origin);
+      url.searchParams.append('result', decodedText);
+      router.push(url.toString());
     }, 100);
   };
 
