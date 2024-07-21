@@ -99,13 +99,19 @@ function ResultComponent() {
                             )}
 
                             <div className={styles.infoContainer}>
-                                <span className={`${styles.infoHeaderText} ${analysis.benignOrMalicious === 'Malicious' ? styles.infoHeaderTextMalicious : styles.infoHeaderTextBenign}`}>
-                                    오염 예상 지수 {analysis.pobm}%
-                                </span>
+                                <div className={`${styles.infoHeaderText} ${analysis.benignOrMalicious === 'Malicious' ? styles.infoHeaderTextMalicious : styles.infoHeaderTextBenign}`}>
+                                <div className={styles.flexContainer}>
+                                    <div className={styles.leftAlignedText}>오염 예상 지수</div>
+                                    <div className={styles.centerAlignedIcon}>
+                                        <img src={analysis.benignOrMalicious === 'Malicious' ? "/status_warn.png" : "/status_safe.png"} alt="QR Code" className={styles.statusIcon} />
+                                    </div>
+                                    <div className={styles.rightAlignedText}>{analysis.pobm}%</div>
+                                </div>
+                            </div>
 
-                                {/* <div className={styles.qrCodeContainer}>
-                                    <img src="/test_qrcode.png" alt="QR Code" className={styles.qrCodeIcon} />
-                                </div> */}
+                                <div className={styles.qrCodeContainer}>
+                                    <img src={analysis.benignOrMalicious === 'Malicious' ? "/qr_warn.png" : "/qr_safe.png"} alt="QR Code" className={styles.qrCodeIcon} />
+                                </div>
                                 <div className={styles.infoDetail}>
                                     <div>
                                         <div className={styles.detailLabel}>큐싱 신고 횟수</div>

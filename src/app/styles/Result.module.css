@@ -110,6 +110,13 @@
   color: #a94442; /* 텍스트 색상을 진한 빨간색으로 */
 }
 
+.statusIcon {
+  width: 25px;
+  height: 25px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 .warning {
   font-size: 12px;
   color: #a94442;
@@ -152,7 +159,7 @@
 
 .infoHeaderText {
   font-size: 18px; /* 적당한 폰트 크기 */
-  font-weight: bold;
+  font-weight: boldg;
 }
 
 .infoHeaderTextBenign {
@@ -161,6 +168,27 @@
 
 .infoHeaderTextMalicious {
   color: #a94442; /* 텍스트 색상을 진한 빨간색으로 */
+}
+
+.flexContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.leftAlignedText {
+  flex: 1;
+  text-align: left;
+}
+
+.centerAlignedIcon {
+  flex: 0;
+  text-align: center;
+}
+
+.rightAlignedText {
+  flex: 1;
+  text-align: center;
 }
 
 .qrCodeContainer {
