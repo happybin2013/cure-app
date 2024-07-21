@@ -12,7 +12,7 @@ export default function Home() {
   const router = useRouter();
   const { location, address, error } = useLocation();
   
-  const reportCntn = ["자전거대여소 따릉이QR","상가앞 전단지QR","지하철역 벽면 포스터QR"]
+  const reportCntn = ["자전거대여소 따릉이QR","상가앞 전단지QR","지하철역 벽면 포스터QR","전기 자전거QR","지하철역 포스터QR"]
 
   const handleFabClick = () => {
     router.push("/scan");
