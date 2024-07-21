@@ -1,48 +1,6 @@
 // components/GyeonggiMapSvg.js
 import React from 'react';
-import styled from 'styled-components';
-
-const Svg = styled.svg`
-  width: 100%;
-  height: auto;
-
-  .region {
-    fill: #5dade2; /* 기본 색상 */
-    stroke-linejoin: round;
-    stroke: #ffffff;
-    stroke-width: 2;
-  }
-
-  .highlight {
-    fill: #27ae60; /* 강조 색상 */
-    stroke: #000000; /* 테두리 색상 */
-    stroke-width: 3; /* 테두리를 조금 더 두껍게 */
-
-  }
-
-  .TEXT {
-    fill: #ffffff;
-    font-size: 16px;
-    text-anchor: middle;
-    alignment-baseline: middle;
-  }
-
-  .danger-level-0 {
-    fill: #e8e8e8; /* 위험 단계 0의 색상 */
-  }
-
-  .danger-level-1 {
-    fill: #98bb36; /* 위험 단계 1의 색상 */
-  }
-
-  .danger-level-2 {
-    fill: #eece5e; /* 위험 단계 2의 색상 */
-  }
-
-  .danger-level-3 {
-    fill: #c9363b; /* 위험 단계 3의 색상 */
-  }
-`;
+import styles from "../styles/Map.module.css";
 
 const getDangerLevelClass = (dangerLevel) => {
   switch (dangerLevel) {
@@ -56,6 +14,16 @@ const getDangerLevelClass = (dangerLevel) => {
       return 'danger-level-0';
   }
 };
+
+const getDangerLevel = (address) => {
+  for (let key in regionCenters) {
+    if (regionCenters[key].name === address) {
+      return regionCenters[key].dangerLevel;
+    }
+  }
+  return 0; // 조건에 맞는 데이터가 없는 경우
+};
+
 const regionCenters = {
     CD41111: { 
       x: 93, y: 667, name: "수원시 장안구", dangerLevel: 2,
@@ -228,42 +196,52 @@ const regionCenters = {
 }
 
 const GyeonggiMapSvg = ({ address }) => {
+  const dangerLevel = getDangerLevel(address);
+  const dangerLevelClass = dangerLevel !== null ? getDangerLevelClass(dangerLevel) : '';
   return (
-    <Svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="dropshadow">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="7"></feGaussianBlur>
-          <feOffset dx="0" dy="0" result="offsetblur"></feOffset>
-          <feMerge>
-            <feMergeNode></feMergeNode>
-            <feMergeNode in="SourceGraphic"></feMergeNode>
-          </feMerge>
-        </filter>
-        <filter id="dropshadow2">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="1.4"></feGaussianBlur>
-          <feOffset dx="1" dy="1" result="offsetblur"></feOffset>
-          <feMerge>
-            <feMergeNode></feMergeNode>
-            <feMergeNode in="SourceGraphic"></feMergeNode>
-          </feMerge>
-        </filter>
-      </defs>
-      <g filter="url(#dropshadow)">
-        {Object.keys(regionCenters).map((id) => {
-          const region = regionCenters[id];
-          const dangerLevelClass = getDangerLevelClass(region.dangerLevel);
-          return (
-            <React.Fragment key={id}>
-              <path
-                id={id}
-                className={`region ${region.name === address ? 'highlight' : ''} ${dangerLevelClass}`}
-                d={region.d}
-              ></path>
-            </React.Fragment>
-          );
-        })}
-      </g>
-    </Svg>
+    <>
+      <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" className='svgContainer'>
+        <defs>
+          <filter id="dropshadow">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="7"></feGaussianBlur>
+            <feOffset dx="0" dy="0" result="offsetblur"></feOffset>
+            <feMerge>
+              <feMergeNode></feMergeNode>
+              <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+          </filter>
+          <filter id="dropshadow2">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="1.4"></feGaussianBlur>
+            <feOffset dx="1" dy="1" result="offsetblur"></feOffset>
+            <feMerge>
+              <feMergeNode></feMergeNode>
+              <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+          </filter>
+        </defs>
+        <g filter="url(#dropshadow)">
+          {Object.keys(regionCenters).map((id) => {
+            const region = regionCenters[id];
+            const dangerLevelClass = getDangerLevelClass(region.dangerLevel);
+            return (
+              <React.Fragment key={id}>
+                <path
+                  id={id}
+                  className={`${styles.region} ${region.name === address ? styles.highlight : ''} ${styles[dangerLevelClass]}`}
+                  d={region.d}
+                ></path>
+              </React.Fragment>
+            );
+          })}
+        </g>
+      </svg>
+      <div>{`${address}의 큐싱 청정도는`}</div>
+      {getDangerLevel(address) !== 0 ? (
+        <div className={styles[dangerLevelClass]}>오염 {getDangerLevel(address)} 단계 입니다.</div>
+      ) : (
+        <div>오염 0 단계 입니다.</div>
+      )}
+    </>
   );
 };
 

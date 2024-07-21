@@ -71,8 +71,6 @@ export default function Home() {
           <div className={styles.statusDescription}>
             {address ?
             <>
-              <div>{`${address}의 큐싱 청정도는`}</div>
-              <div className={styles.boldText}>오염 3 단계 입니다.</div>
               <ReportList address={address} reportCntn={reportCntn} />
             </> : '행정구역 정보를 가져오는 중...'}
           </div>

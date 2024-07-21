@@ -1,0 +1,55 @@
+  .svgContainer svg {
+    width: 100%;
+    height: auto;
+  }
+  
+  .region {
+    fill: #5dade2; /* 기본 색상 */
+    stroke-linejoin: round;
+    stroke: #ffffff;
+    stroke-width: 2;
+  }
+  
+  .highlight {
+    fill: #27ae60; /* 강조 색상 */
+    stroke: #000000; /* 테두리 색상 */
+    stroke-width: 3; /* 테두리를 조금 더 두껍게 */
+  }
+  
+  .TEXT {
+    fill: #ffffff;
+    font-size: 16px;
+    text-anchor: middle;
+    alignment-baseline: middle;
+  }
+  
+  .danger-level-0 {
+    fill: #e8e8e8; /* 위험 단계 0의 색상 */
+    color: #e8e8e8;
+    font-weight: bold;
+  }
+  
+  .danger-level-1 {
+    fill: #98bb36; /* 위험 단계 1의 색상 */
+    color: #98bb36;
+    font-weight: bold;
+  }
+  
+  .danger-level-2 {
+    fill: #eece5e; /* 위험 단계 2의 색상 */
+    color: #eece5e;
+    font-weight: bold;
+  }
+  
+  .danger-level-3 {
+    fill: #c9363b; /* 위험 단계 3의 색상 */
+    color: #c9363b;
+    font-weight: bold;
+  }
+  
+  .boldText {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
