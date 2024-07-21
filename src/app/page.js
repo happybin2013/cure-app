@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 import styles from "./styles/Home.module.css";
 import ReportList from "./components/ReportList";
 import useLocation from "./hooks/useLocation";
-import useReports from "./hooks/useReports";
 import SeoulMapSvg from "./components/SeoulMapSvg";
 import GyeonggiMapSvg from "./components/GyeonggiMapSvg";
 
 export default function Home() {
   const router = useRouter();
   const { location, address, error } = useLocation();
+  
   const reportCntn = ["자전거대여소 따릉이QR","상가앞 전단지QR","지하철역 벽면 포스터QR"]
 
   const handleFabClick = () => {
