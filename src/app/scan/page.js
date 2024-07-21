@@ -12,11 +12,11 @@ export default function Scan() {
   const qrCodeRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
   const router = useRouter();
+  const [scannerInitialized, setScannerInitialized] = useState(false);
 
   const handleBackClick = () => {
     router.push("/");
   };
-
 
   const onScanSuccess = (decodedText) => {
     setResult(decodedText);
@@ -32,54 +32,47 @@ export default function Scan() {
         router.push(`/result?result=${encodeURIComponent(decodedText)}`);
     }
 };
-
-  const initializeScanner = async () => {
-    if (qrCodeRef.current) {
-      await qrCodeRef.current.stop();
-      qrCodeRef.current = null;
-    }
-
+  const startQrScanner = async () => {
     try {
-      const config = {
-        fps: 10,
-        qrbox: { width: 250, height: 250 },
-        aspectRatio: 1.0,
-        rememberLastUsedCamera: true,
-        experimentalFeatures: {
-          useBarCodeDetectorIfSupported: true,
-        },
-      };
+        const config = {
+            fps: 10,
+            rememberLastUsedCamera: true,
+            aspectRatio: 1.0,
+            experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true,
+            },
+            facingMode: "environment", // 모바일에서는 후면 카메라를 우선으로 사용
+        };
 
-      const html5QrCode = new Html5Qrcode("qr-reader");
-      qrCodeRef.current = html5QrCode;
+        const html5QrCode = new Html5Qrcode("qr-reader");
+        qrCodeRef.current = html5QrCode;
 
-      await html5QrCode.start(
-        { facingMode: "environment" },
-        config,
-        onScanSuccess,
-        (errorMessage) => {
-          // 에러 메시지 출력을 제거하거나 필요한 경우에만 출력
-          if (errorMessage.includes("NotFoundError")) {
-            console.error("QR code not found in frame");
-          }
-        }
-      );
-      setIsReady(true);
+        await html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            onScanSuccess
+        );
+        setScannerInitialized(true); // 스캐너가 초기화되었음을 표시
     } catch (err) {
-      console.error("Camera initialization failed:", err);
+        console.error("Camera permission denied", err);
     }
-  };
+};
 
   useEffect(() => {
-    setIsReady(false);
-    initializeScanner();
+    if (!scannerInitialized) { // 초기화 여부 확인
+        startQrScanner();
+    }
 
     return () => {
-      if (qrCodeRef.current) {
-        qrCodeRef.current.stop().catch(err => console.error("Error stopping scanner:", err));
-      }
+        if (qrCodeRef.current && scannerInitialized) {
+            qrCodeRef.current.stop().then(() => {
+                qrCodeRef.current.clear();
+                qrCodeRef.current = null; // 참조 해제
+                setScannerInitialized(false);
+            }).catch(err => console.error("Failed to stop QR code scanner", err));
+        }
     };
-  }, []);
+}, [scannerInitialized]);
 
   return (
     <div className={styles.container}>
@@ -99,7 +92,7 @@ export default function Scan() {
         <div className={styles.content}>
           <div id="qr-reader" className={styles.qrReader}></div>
         </div>
-        {isReady && <div className={styles.instruction}>의심되는 QR 코드를 인식해주세요</div>}
+        {scannerInitialized && <div className={styles.instruction}>의심되는 QR 코드를 인식해주세요</div>}
       </div>
     </div>
   );

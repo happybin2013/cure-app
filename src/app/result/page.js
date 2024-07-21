@@ -101,9 +101,9 @@ function ResultComponent() {
                                     <span className={styles.infoHeaderText}>오염 예상 지수 <img src="/warn.png" alt="Warning" className={styles.infoHeaderIcon} /> {analysis.pobm}%</span>
                                 </div>
 
-                                <div className={styles.qrCodeContainer}>
+                                {/* <div className={styles.qrCodeContainer}>
                                     <img src="/test_qrcode.png" alt="QR Code" className={styles.qrCodeIcon} />
-                                </div>
+                                </div> */}
                                 <div className={styles.infoDetail}>
                                     <div>
                                         <div className={styles.detailLabel}>큐싱 신고 횟수</div>
