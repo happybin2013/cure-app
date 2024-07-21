@@ -83,23 +83,25 @@ function ResultComponent() {
                             <h2 className={styles.title2} style={{ color: analysis.benignOrMalicious === 'Malicious' ? '#d9534f' : '#5cb85c' }}>
                                 {analysis.benignOrMalicious === 'Malicious' ? '큐싱 위험' : '정상'}
                             </h2>
-                            <Image src="/test_qrcode.png" alt="QR Code" className={styles.qrCode} width={135} height={135} />
+                            <Image src="/test_qrcode.png" alt="QR Code" width={135} // 원하는 너비로 설정 
+                            height={135} // 원하는 높이로 설정
+                            className={analysis.benignOrMalicious === 'Malicious' ? styles.qrCodeMalicious : styles.qrCodeBenign } />
 
-                            <div className={styles.qrUrl}>
+                            <div className={analysis.benignOrMalicious === 'Malicious' ? styles.qrUrlMalicious : styles.qrUrlBenign}>
                                 {result ? decodeURIComponent(result) : "QR 스캔 정보가 없습니다."}
                             </div>
 
                             {analysis.benignOrMalicious === 'Malicious' && (
                                 <div className={styles.warning}>
-                                    <span className={styles.warningIcon}>⚠️</span>
+                                    <img src="/warn.png" alt="Warning" className={styles.warningIcon} />
                                     접속하지 마세요! 스미싱이 예상되는 악성 URL입니다.
                                 </div>
                             )}
 
                             <div className={styles.infoContainer}>
-                                <div className={styles.infoHeader}>
-                                    <span className={styles.infoHeaderText}>오염 예상 지수 <img src="/warn.png" alt="Warning" className={styles.infoHeaderIcon} /> {analysis.pobm}%</span>
-                                </div>
+                                <span className={`${styles.infoHeaderText} ${analysis.benignOrMalicious === 'Malicious' ? styles.infoHeaderTextMalicious : styles.infoHeaderTextBenign}`}>
+                                    오염 예상 지수 {analysis.pobm}%
+                                </span>
 
                                 {/* <div className={styles.qrCodeContainer}>
                                     <img src="/test_qrcode.png" alt="QR Code" className={styles.qrCodeIcon} />
