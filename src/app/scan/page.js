@@ -20,16 +20,11 @@ export default function Scan() {
   const onScanSuccess = (decodedText) => {
     setResult(decodedText);
     if (qrCodeRef.current) {
-      qrCodeRef.current.stop().catch(err => console.error("Failed to stop scanner:", err));
-    }
-    
-    setTimeout(() => {
-      setIsReady(false);
-      // URL 객체 사용
-      const url = new URL('/result', window.location.origin);
-      url.searchParams.append('result', decodedText);
-      router.push(url.toString());
-    }, 100);
+        qrCodeRef.current.stop().then(() => {
+            qrCodeRef.current.clear();
+            router.push(`/result?result=${encodeURIComponent(decodedText)}`);
+        }).catch(err => console.error("Failed to stop QR code scanner", err));
+      }
   };
 
   const initializeScanner = async () => {
