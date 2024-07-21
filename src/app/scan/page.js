@@ -37,6 +37,7 @@ export default function Scan() {
         const config = {
             fps: 10,
             rememberLastUsedCamera: true,
+            qrbox: { width: 250, height: 250 },
             aspectRatio: 1.0,
             experimentalFeatures: {
                 useBarCodeDetectorIfSupported: true,
