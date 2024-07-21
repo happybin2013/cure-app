@@ -10,7 +10,6 @@ import styles from "../styles/Scan.module.css";
 export default function Scan() {
   const [result, setResult] = useState("");
   const qrCodeRef = useRef(null);
-  const [scannerInitialized, setScannerInitialized] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const router = useRouter();
 
@@ -21,9 +20,7 @@ export default function Scan() {
   const onScanSuccess = (decodedText) => {
     setResult(decodedText);
     if (qrCodeRef.current) {
-      qrCodeRef.current.stop().then(() => {
-        console.log("Scanner stopped.");
-      }).catch(err => console.error("Failed to stop scanner:", err));
+      qrCodeRef.current.stop().catch(err => console.error("Failed to stop scanner:", err));
     }
     
     setTimeout(() => {
@@ -41,11 +38,8 @@ export default function Scan() {
     try {
       const config = {
         fps: 10,
-        rememberLastUsedCamera: true,
+        qrbox: { width: 250, height: 250 },
         aspectRatio: 1.0,
-        experimentalFeatures: {
-          useBarCodeDetectorIfSupported: true,
-        },
       };
 
       const html5QrCode = new Html5Qrcode("qr-reader");
@@ -56,28 +50,25 @@ export default function Scan() {
         config,
         onScanSuccess,
         (errorMessage) => {
-          console.log(errorMessage);
+          // 에러 메시지 출력을 제거하거나 필요한 경우에만 출력
+          if (errorMessage.includes("NotFoundError")) {
+            console.error("QR code not found in frame");
+          }
         }
       );
-      setScannerInitialized(true);
       setIsReady(true);
     } catch (err) {
-      console.error("Camera permission denied or error occurred", err);
+      console.error("Camera initialization failed:", err);
     }
   };
 
   useEffect(() => {
     setIsReady(false);
-    setScannerInitialized(false);
     initializeScanner();
 
     return () => {
       if (qrCodeRef.current) {
-        qrCodeRef.current.stop().then(() => {
-          qrCodeRef.current = null;
-          setScannerInitialized(false);
-          setIsReady(false);
-        }).catch(err => console.error("Error stopping scanner:", err));
+        qrCodeRef.current.stop().catch(err => console.error("Error stopping scanner:", err));
       }
     };
   }, []);
