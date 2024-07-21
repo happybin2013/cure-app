@@ -17,15 +17,21 @@ export default function Scan() {
     router.push("/");
   };
 
+
   const onScanSuccess = (decodedText) => {
     setResult(decodedText);
-    if (qrCodeRef.current) {
+    if (qrCodeRef.current && scannerInitialized) {
         qrCodeRef.current.stop().then(() => {
             qrCodeRef.current.clear();
             router.push(`/result?result=${encodeURIComponent(decodedText)}`);
-        }).catch(err => console.error("Failed to stop QR code scanner", err));
-      }
-  };
+        }).catch(err => {
+            console.error("Failed to stop QR code scanner", err);
+            router.push(`/result?result=${encodeURIComponent(decodedText)}`);
+        });
+    } else {
+        router.push(`/result?result=${encodeURIComponent(decodedText)}`);
+    }
+};
 
   const initializeScanner = async () => {
     if (qrCodeRef.current) {
@@ -38,6 +44,10 @@ export default function Scan() {
         fps: 10,
         qrbox: { width: 250, height: 250 },
         aspectRatio: 1.0,
+        rememberLastUsedCamera: true,
+        experimentalFeatures: {
+          useBarCodeDetectorIfSupported: true,
+        },
       };
 
       const html5QrCode = new Html5Qrcode("qr-reader");
