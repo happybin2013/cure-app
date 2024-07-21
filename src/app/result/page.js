@@ -56,7 +56,7 @@ function ResultComponent() {
     }, [result]);
 
     const handleBackClick = () => {
-        router.push("/scan"); // 스캔 페이지로 돌아가기
+        router.push("/");
     };
 
     const handleRetryClick = () => {
@@ -65,63 +65,68 @@ function ResultComponent() {
 
     return (
         <div className={styles.container}>
-            <div className={styles.header}>
-                <button onClick={handleBackClick} className={styles.backButton}>
-                    ×
-                </button>
-                <h1 className={styles.title}>검사 결과</h1>
-            </div>
+            <div className={styles.mobileContainer}>
+                <div className={styles.header}>
+                    <button onClick={handleBackClick} className={styles.backButton}>
+                        ×
+                    </button>
+                    <h1 className={styles.title}>검사 결과</h1>
+                </div>
 
-            <div className={styles.content}>
-                {loading ? (
-                    <div>Loading...</div>
-                ) : error ? (
-                    <div>Error: {error}</div>
-                ) : (
-                    <>
-                        <h2 className={styles.title} style={{ color: analysis.benignOrMalicious === 'Malicious' ? '#d9534f' : '#5cb85c' }}>
-                            {analysis.benignOrMalicious === 'Malicious' ? '큐싱 의심' : '정상'}
-                        </h2>
-                        <Image src="/test_qrcode.png" alt="QR Code" className={styles.qrCode} width={200} height={200} />
+                <div className={styles.content}>
+                    {loading ? (
+                        <div>Loading...</div>
+                    ) : error ? (
+                        <div>Error: {error}</div>
+                    ) : (
+                        <>
+                            <h2 className={styles.title2} style={{ color: analysis.benignOrMalicious === 'Malicious' ? '#d9534f' : '#5cb85c' }}>
+                                {analysis.benignOrMalicious === 'Malicious' ? '큐싱 위험' : '정상'}
+                            </h2>
+                            <Image src="/test_qrcode.png" alt="QR Code" className={styles.qrCode} width={135} height={135} />
 
-                        <div className={styles.qrUrl}>
-                            {result ? decodeURIComponent(result) : "QR 스캔 정보가 없습니다."}
-                        </div>
-
-                        {analysis.benignOrMalicious === 'Malicious' && (
-                            <div className={styles.warning}>
-                                <span className={styles.warningIcon}>⚠️</span>
-                                접속하지 마세요! 스미싱이 예상되는 악성 URL입니다.
+                            <div className={styles.qrUrl}>
+                                {result ? decodeURIComponent(result) : "QR 스캔 정보가 없습니다."}
                             </div>
-                        )}
 
-                        <div className={styles.infoContainer}>
-                            <div className={styles.infoHeader}>
-                                <span className={styles.infoHeaderIcon}>📊</span>
-                                <span className={styles.infoHeaderText}>오염 예상 지수</span>
-                            </div>
-                            <div className={styles.infoScore}>{analysis.pobm}%</div>
-                            <div className={styles.infoDetail}>
-                                <div>
-                                    <div className={styles.detailLabel}>패턴 특징</div>
-                                    <div className={styles.detailValue}>
-                                        {analysis.patternFeature && analysis.patternFeature.length > 0
-                                            ? analysis.patternFeature.join(', ')
-                                            : "해당 없음"}
+                            {analysis.benignOrMalicious === 'Malicious' && (
+                                <div className={styles.warning}>
+                                    <span className={styles.warningIcon}>⚠️</span>
+                                    접속하지 마세요! 스미싱이 예상되는 악성 URL입니다.
+                                </div>
+                            )}
+
+                            <div className={styles.infoContainer}>
+                                <div className={styles.infoHeader}>
+                                    <span className={styles.infoHeaderText}>오염 예상 지수 <img src="/warn.png" alt="Warning" className={styles.infoHeaderIcon} /> {analysis.pobm}%</span>
+                                </div>
+
+                                <div className={styles.qrCodeContainer}>
+                                    <img src="/test_qrcode.png" alt="QR Code" className={styles.qrCodeIcon} />
+                                </div>
+                                <div className={styles.infoDetail}>
+                                    <div>
+                                        <div className={styles.detailLabel}>큐싱 신고 횟수</div>
+                                        <div className={styles.detailValue}>{analysis.benignOrMalicious === 'Malicious' ? '63' : '0'} 건</div>
+                                    </div>
+                                    <div>
+                                        <div className={styles.detailLabel}>큐싱 의심 패턴</div>
+                                        <div className={styles.detailValue}>{analysis.patternFeature.length}회 탐지</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </>
-                )}
+                        </>
+                    )}
 
-                <button onClick={handleRetryClick} className={styles.retryButton}>
-                    다시 검사하기
-                </button>
+                    <button onClick={handleRetryClick} className={styles.retryButton}>
+                        다시 검사하기
+                    </button>
+                </div>
             </div>
         </div>
     );
 }
+
 function Result() {
     return (
         <Suspense fallback={<div>Loading...</div>}>

@@ -12,7 +12,7 @@ import GyeonggiMapSvg from "./components/GyeonggiMapSvg";
 export default function Home() {
   const router = useRouter();
   const { location, address, error } = useLocation();
-  const reportCntn = useReports(address);
+  const reportCntn = ["자전거대여소 따릉이QR","상가앞 전단지QR","지하철역 벽면 포스터QR"]
 
   const handleFabClick = () => {
     router.push("/scan");
@@ -52,8 +52,6 @@ export default function Home() {
       return <SeoulMapSvg address={address} />;
     } else if (isGyeonggi(address)) {
       return <GyeonggiMapSvg address={address} />;
-    } else {
-      return <div>지원되지 않는 지역입니다.</div>;
     }
   };
 
@@ -71,9 +69,13 @@ export default function Home() {
             <MapComponent />
           </div>
           <div className={styles.statusDescription}>
-            {address ? `${address}의 큐싱 청정도는 오염 3 단계 입니다.` : '행정구역 정보를 가져오는 중...'}
+            {address ?
+            <>
+              <div>{`${address}의 큐싱 청정도는`}</div>
+              <div className={styles.boldText}>오염 3 단계 입니다.</div>
+              <ReportList address={address} reportCntn={reportCntn} />
+            </> : '행정구역 정보를 가져오는 중...'}
           </div>
-          <ReportList address={address} reportCntn={reportCntn} />
         </div>
       </div>
 

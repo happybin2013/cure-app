@@ -2,97 +2,69 @@
   margin: 0;
   padding: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   height: 100vh;
   background-color: #f0f0f0;
   font-family: Arial, sans-serif;
 }
 
+.mobileContainer {
+  width: 375px; /* 모바일 화면 너비 설정 */
+  height: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: white;
+}
+
+
 .header {
   background-color: #a3d133;
-  width: 100%;
+  padding: 10px;
   display: flex;
   align-items: center;
-  padding: 10px;
+  justify-content: space-between;
+  font-size: 16px; /* 글씨 크기를 작게 조정 */
+  font-weight: bold;
   color: white;
 }
 
 .backButton {
+  font-size: 16px; /* 글씨 크기를 작게 조정 */
   background: none;
   border: none;
   color: white;
-  font-size: 24px;
-  margin-right: 10px;
   cursor: pointer;
 }
 
 .title {
   font-size: 18px;
-  font-weight: bold;
   margin: 0;
+  flex-grow: 1;
+  text-align: left;
+  padding-left: 20px;
 }
 
 .content {
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-}
-
-.scanButton {
-  padding: 10px 20px;
-  font-size: 16px;
-  color: white;
-  background-color: #a3d133;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
   margin-bottom: 20px;
-}
-
-.scanButton:hover {
-  background-color: #8bb029;
-}
-
-.instruction {
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
-  padding: 10px;
-  background-color: rgba(245, 245, 245, 0.8); /* 배경색을 반투명으로 설정 */
-  color: #000;
-}
-
-.result {
-  font-size: 16px;
-  color: #333;
-  margin-top: 10px;
-}
-
-.Scan_header__kB9Ik {
-  padding: 0;
-}
-
-.Scan_content__TQUQN {
-  width: 100%;
 }
 
 .qrReader {
   width: 100%;
-  position: relative;
+  max-width: 400px;
 }
 
-/* .qrOverlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 80%;
-  height: 80%;
-  border: 2px solid white;
-  border-radius: 16px;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-} */
+.instruction {
+  padding: 10px;
+  text-align: center;
+  color: #555;
+  font-size: 14px; /* 글씨 크기를 작게 조정 */
+  margin-top: 10px;
+}

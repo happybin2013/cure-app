@@ -1,23 +1,33 @@
+/* styles/ReportList.module.css */
 .report {
-  background-color: #f8f8f8;
   padding: 10px;
-  border-radius: 10px;
-  text-align: left;
-  margin-top: 20px;
+  background-color: #313131;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+
 .reportTitle {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
+  color: #ffffff;
 }
 
 .reportItem {
-  font-size: 14px;
-  color: #333;
+  padding: 8px;
   background-color: #ffffff;
-  padding: 10px;
-  border-radius: 10px;
-  margin-top: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.reportItem:last-child {
+  margin-bottom: 0;
+}
+
+.scrollableList {
+  max-height: 160px; /* 원하는 높이로 설정 */
+  overflow-y: auto;
 }
